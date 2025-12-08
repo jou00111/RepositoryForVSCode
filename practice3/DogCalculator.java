@@ -1,4 +1,4 @@
-class Calculator {
+class DogCalculator {
     Dog createDog(String name, int age) {
         Dog d = new Dog();
         d.name = name;
