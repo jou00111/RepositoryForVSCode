@@ -1,4 +1,4 @@
-class Expense {
+class Expense2 {
     String title;
     int amount;
 
