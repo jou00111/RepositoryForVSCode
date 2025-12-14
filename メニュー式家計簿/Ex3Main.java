@@ -11,24 +11,50 @@ public class Ex3Main {
         ArrayList<Expense3> list = new ArrayList<>();
 
         // 「終了」と入力されるまで繰り返す無限ループ
+        // テーマ選択
+        System.out.println("=== テーマを選んでください ===");
+        System.out.println("1. クラシック");
+        System.out.println("2. ブルー");
+        System.out.println("3. ポップ");
+        System.out.print("番号 → ");
+
+        int theme = Integer.parseInt(sc.nextLine());
+
         while (true) {
-            System.out.println("\n---メニューｰ");
-            System.out.println("1. 家計簿を入力する");
-            System.out.println("2. 家計簿一覧を見る");
-            System.out.println("3. 合計金額を見る");
-            System.out.println("4. 終了する");
-            System.out.print("番号を選んでください: ");
 
-            String choise = sc.nextLine(); ///メニュー番号を入力
+            // テーマごとにメニューの見た目を変える
+            if (theme == 1) {
+                System.out.println("\n==============================");
+                System.out.println("        家計簿アプリ");
+                System.out.println("==============================");
+            } else if (theme == 2) {
+                System.out.println("\n■■■■■■■■■■■■■■■■■■■■■■■■");
+                System.out.println("        ◆ 家計簿アプリ ◆");
+                System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■");
+            } else if (theme == 3) {
+                System.out.println("\n✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨");
+                System.out.println("        ★ 家計簿アプリ ★");
+                System.out.println("✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨");
+            }
 
-            switch ((choise)) {
+            System.out.println("【メニュー】");
+            System.out.println("  1. 家計簿を入力する");
+            System.out.println("  2. 家計簿一覧を見る");
+            System.out.println("  3. 合計金額を見る");
+            System.out.println("  4. 家計簿を削除する");
+            System.out.println("  5. 終了する");
+
+            System.out.print("\n番号を入力してください → ");
+            String choice = sc.nextLine();
+
+            // ここから先は今までの switch(choice) と同じ
+            switch (choice) {
+
                 case "1":
-
-                    // ---家計簿を入力---
-                    System.out.print("項目:");
+                    System.out.print("項目: ");
                     String title = sc.nextLine();
 
-                    System.out.println("金額: ");
+                    System.out.print("金額: ");
                     int amount = Integer.parseInt(sc.nextLine());
 
                     Expense3 e = new Expense3();
@@ -36,29 +62,50 @@ public class Ex3Main {
                     e.amount = amount;
 
                     list.add(e);
-                    System.out.println("追加しました!");
+                    System.out.println("✅ 追加しました！");
                     break;
+
                 case "2":
-                    // --- 一覧表示 ---
-                    System.out.println(("\n---家計簿一覧---"));
-                    for (Expense3 o : list) {
-                        o.show();
+                    System.out.println("\n📄 --- 家計簿一覧 ---");
+                    for (Expense3 ex : list) {
+                        ex.show();
                     }
                     break;
 
                 case "3":
-                    // --ｰ合計表示 ---
                     int sum = total(list);
-                    System.out.println("合計:" + sum + "円");
+                    System.out.println("\n💰 合計: " + sum + "円");
                     break;
 
                 case "4":
-                    // ---終了---
-                    System.out.println("終了します。");
+                    // --削除機能追加--
+                    if (list.isEmpty()) {
+                        System.out.println("⚠️削除できるデータがありません");
+                        break;
+                    }
+                    System.out.println("\n削除したい番号を入力してください。");
+                    for (int i = 0; i < list.size(); i++) {
+                        System.out.println((i + 1) + "." + list.get(i).title + ":" + list.get(i).amount + "円");
+                    }
+                    System.out.print("番号");
+                    int del = Integer.parseInt(sc.nextLine());
+
+                    if (del < 1 || del > list.size()) {
+                        System.out.println("⚠️正しい番号を入力してください。");
+                        break;
+                    }
+                    list.remove(del - 1);
+                    System.out.println("✅削除しました！");
+                    break;
+
+                case "5":
+                    System.out.println("👋 アプリを終了します。");
                     sc.close();
-                    return; // main を終了
+                    return;
+
                 default:
-                    System.err.println("1～4の番号を入力してください。");
+                    System.out.println("⚠ 1〜4の番号を入力してください。");
+                    continue;
             }
         }
 
