@@ -1,8 +1,9 @@
 class Expense3 {
     String title;
     int amount;
+    String category;
 
     void show() {
-        System.out.println(title + ":" + amount + "円");
+        System.out.println(category + "/" + title + ":" + amount + "円");
     }
 }
