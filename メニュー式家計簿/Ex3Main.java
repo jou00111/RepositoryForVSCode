@@ -2,17 +2,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ex3Main {
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        // キーボード入力を受け取る Scanner
 
+        // 家計簿データを入れるリスト
         ArrayList<Expense3> list = new ArrayList<>();
-        // Expense3 を好きなだけ入れられるリスト（配列と違ってサイズ自由）
+
+        // ✅ カテゴリ一覧（1回だけ定義して全体で使う）
         String[] categories = { "食費", "交通費", "日用品", "娯楽", "その他" };
 
         // -------------------------------
-        // テーマ選択（見た目を変える）
+        // テーマ選択
         // -------------------------------
         System.out.println("=== テーマを選んでください ===");
         System.out.println("1. クラシック");
@@ -21,7 +23,6 @@ public class Ex3Main {
         System.out.print("番号 → ");
 
         int theme = Integer.parseInt(sc.nextLine());
-        // 選んだテーマ番号を保存
 
         // -------------------------------
         // メインループ（メニュー方式）
@@ -29,7 +30,7 @@ public class Ex3Main {
         while (true) {
 
             // -------------------------------
-            // テーマごとにメニューの見た目を変える
+            // テーマごとに見た目を変える
             // -------------------------------
             if (theme == 1) {
                 System.out.println("\n==============================");
@@ -54,10 +55,11 @@ public class Ex3Main {
             System.out.println("  3. 合計金額を見る");
             System.out.println("  4. 家計簿を削除する");
             System.out.println("  5. カテゴリ別合計を見る");
-            System.out.println("  6. 終了する");
+            System.out.println("  6. 月別合計を見る");
+            System.out.println("  7. 終了する");
 
             System.out.print("\n番号を入力してください → ");
-            String choice = sc.nextLine(); // メニュー番号を文字列で受け取る
+            String choice = sc.nextLine();
 
             // -------------------------------
             // メニュー処理
@@ -83,25 +85,52 @@ public class Ex3Main {
 
                     String category = categories[catNo - 1];
 
-                    // -------------------------------
-                    // 2. 家計簿一覧を見る
-                    // -------------------------------
+                    // タイトル入力
+                    System.out.print("タイトルを入力してください → ");
+                    String title = sc.nextLine();
+
+                    // 金額入力
+                    System.out.print("金額を入力してください → ");
+                    int amount = Integer.parseInt(sc.nextLine());
+
+                    // 月入力追加
+                    System.out.print("月を入力してください（例：1〜12） → ");
+                    int month = Integer.parseInt(sc.nextLine());
+                    if (month < 1 || month > 12) {
+                        System.out.println("⚠️正しい月を入力してください。");
+                        break;
+                    }
+
+                    // リストに追加
+                    Expense3 e = new Expense3(category, title, amount, month);
+                    list.add(e);
+
+                    System.out.println("✅ 登録しました！");
+                    break;
+
+                // -------------------------------
+                // 2. 家計簿一覧を見る
+                // -------------------------------
                 case "2":
                     System.out.println("\n📄 --- 家計簿一覧 ---");
 
-                    // 番号付きで表示するため、普通の for 文を使う
+                    if (list.isEmpty()) {
+                        System.out.println("（まだデータがありません）");
+                        break;
+                    }
+
                     for (int i = 0; i < list.size(); i++) {
                         Expense3 item = list.get(i);
-                        System.out.println((i + 1) + ". [" + item.category + "] "
+                        System.out.println((i + 1) + ". [" + item.month + "月] [" + item.category + "] "
                                 + item.title + " : " + item.amount + "円");
                     }
                     break;
 
                 // -------------------------------
-                // 3. 合計金額を見る
+                // 3. 全体の合計金額を見る
                 // -------------------------------
                 case "3":
-                    int sum = total(list); // 合計計算メソッドを呼ぶ
+                    int sum = total(list);
                     System.out.println("\n💰 合計: " + sum + "円");
                     break;
 
@@ -116,7 +145,6 @@ public class Ex3Main {
 
                     System.out.println("\n削除したい番号を入力してください。");
 
-                    // 番号付きで一覧表示
                     for (int i = 0; i < list.size(); i++) {
                         Expense3 item = list.get(i);
                         System.out.println((i + 1) + ". [" + item.category + "] "
@@ -126,21 +154,19 @@ public class Ex3Main {
                     System.out.print("番号 → ");
                     int del = Integer.parseInt(sc.nextLine());
 
-                    // 入力チェック
                     if (del < 1 || del > list.size()) {
                         System.out.println("⚠️ 正しい番号を入力してください。");
                         break;
                     }
 
-                    list.remove(del - 1); // index は 0 始まりなので -1
+                    list.remove(del - 1);
                     System.out.println("✅ 削除しました！");
                     break;
 
                 // -------------------------------
-                // 5. カテゴリ別合計を見る
+                // 5. カテゴリ別合計を見る（番号選択式）
                 // -------------------------------
                 case "5":
-                    // カテゴリ一覧
                     System.out.println("カテゴリを選んでください:");
                     for (int i = 0; i < categories.length; i++) {
                         System.out.println((i + 1) + ". " + categories[i]);
@@ -165,18 +191,22 @@ public class Ex3Main {
                     }
 
                     System.out.println("\n📚 「" + target + "」の合計: " + catSum + "円");
+                    break;
 
+                // -------------------------------
+                // 6. 終了する
+                // -------------------------------
                 case "6":
                     System.out.println("👋 アプリを終了します。");
                     sc.close();
-                    return; // main メソッドを終了 → プログラム終了
+                    return;
 
                 // -------------------------------
                 // その他（入力ミス）
                 // -------------------------------
                 default:
                     System.out.println("⚠ 1〜6 の番号を入力してください。");
-                    continue;
+                    break;
             }
         }
     }

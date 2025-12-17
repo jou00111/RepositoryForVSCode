@@ -1,9 +1,13 @@
-class Expense3 {
+public class Expense3 {
+    String category;
     String title;
     int amount;
-    String category;
+    int month; // ← 追加！
 
-    void show() {
-        System.out.println(category + "/" + title + ":" + amount + "円");
+    public Expense3(String category, String title, int amount, int month) {
+        this.category = category;
+        this.title = title;
+        this.amount = amount;
+        this.month = month;
     }
 }
