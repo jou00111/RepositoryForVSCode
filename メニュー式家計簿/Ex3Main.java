@@ -1,3 +1,4 @@
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,6 +10,17 @@ public class Ex3Main {
 
         // 家計簿データを入れるリスト
         ArrayList<Expense3> list = new ArrayList<>();
+
+        try (Scanner fileScanner = new Scanner(new java.io.File("expenses.csv"))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                Expense3 e = Expense3.fromCSV(line);
+                list.add(e);
+            }
+            System.out.println("📂 CSVからデータを読み込みました！");
+        } catch (Exception ex) {
+            System.out.println("（CSVファイルがまだありません）");
+        }
 
         // ✅ カテゴリ一覧（1回だけ定義して全体で使う）
         String[] categories = { "食費", "交通費", "日用品", "娯楽", "その他" };
@@ -57,6 +69,7 @@ public class Ex3Main {
             System.out.println("  5. カテゴリ別合計を見る");
             System.out.println("  6. 月別合計を見る");
             System.out.println("  7. 終了する");
+            System.out.println("  8. 家計簿をCSVに保存する");
 
             System.out.print("\n番号を入力してください → ");
             String choice = sc.nextLine();
@@ -192,11 +205,28 @@ public class Ex3Main {
 
                     System.out.println("\n📚 「" + target + "」の合計: " + catSum + "円");
                     break;
-
-                // -------------------------------
-                // 6. 終了する
-                // -------------------------------
                 case "6":
+                    System.out.print("集計したい月を入力してください（例：1〜12） → ");
+                    int targetMonth = Integer.parseInt(sc.nextLine());
+                    if (targetMonth < 1 || targetMonth > 12) {
+                        System.out.println("⚠️正しい月を入力してください。");
+                        break;
+                    }
+
+                    int monthSum = 0;
+
+                    for (Expense3 item : list) {
+                        if (item.month == targetMonth) {
+                            monthSum += item.amount;
+                        }
+                    }
+
+                    System.out.println("\n📅 " + targetMonth + "月の合計: " + monthSum + "円");
+                    break;
+                // -------------------------------
+                // 7. 終了する
+                // -------------------------------
+                case "7":
                     System.out.println("👋 アプリを終了します。");
                     sc.close();
                     return;
@@ -206,6 +236,17 @@ public class Ex3Main {
                 // -------------------------------
                 default:
                     System.out.println("⚠ 1〜6 の番号を入力してください。");
+                    break;
+
+                case "8":
+                    try (PrintWriter pw = new PrintWriter("expenses.csv")) {
+                        for (Expense3 item : list) {
+                            pw.println(item.toCSV());
+                        }
+                        System.out.println("✅ csvに保存しました。");
+                    } catch (Exception ex) {
+                        System.out.println("⚠️ 保存に失敗しました。");
+                    }
                     break;
             }
         }
