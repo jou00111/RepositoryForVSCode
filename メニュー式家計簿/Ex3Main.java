@@ -117,6 +117,7 @@ public class Ex3Main {
                     // リストに追加
                     Expense3 e = new Expense3(category, title, amount, month);
                     list.add(e);
+                    saveCSV(list);
 
                     System.out.println("✅ 登録しました！");
                     break;
@@ -173,6 +174,7 @@ public class Ex3Main {
                     }
 
                     list.remove(del - 1);
+                    saveCSV(list);
                     System.out.println("✅ 削除しました！");
                     break;
 
@@ -261,5 +263,16 @@ public class Ex3Main {
             sum += e.amount;
         }
         return sum;
+    }
+
+    static void saveCSV(ArrayList<Expense3> list) {
+        try (PrintWriter pw = new PrintWriter("expenses.csv")) {
+            for (Expense3 item : list) {
+                pw.println(item.toCSV());
+            }
+            System.out.println("💾 自動保存しました");
+        } catch (Exception ex) {
+            System.out.println("⚠ 自動保存中にエラーが発生しました");
+        }
     }
 }
