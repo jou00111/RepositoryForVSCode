@@ -47,5 +47,7 @@ public class JankenGame {
             }
 
         }
+
+        sc.close();
     }
 }
