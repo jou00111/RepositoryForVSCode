@@ -29,6 +29,12 @@ public class FishApp {
                     System.out.print("魚の名称→");
                     String FishName = a.nextLine();
 
+                    System.out.println("使用した釣り竿");
+                    String fishingRod = a.nextLine();
+
+                    System.out.println("潮汐");
+                    String tide = a.nextLine();
+
                     System.out.print("サイズ");
                     int size = a.nextInt();
 
@@ -36,14 +42,16 @@ public class FishApp {
                     int count = a.nextInt();
                     a.nextLine();
 
-                    Records.add(new FishRecord(date, FishName, size, count));
+                    Records.add(new FishRecord(date, FishName, fishingRod, tide, size, count));
 
                     System.out.println("釣果を登録しました！");
                     break;
 
                 case 2:
                     for (FishRecord b : Records) {
-                        System.out.println(b.date + "/" + b.fishName + "/" + b.size + "/" + b.count);
+                        System.out
+                                .println(b.date + "/" + b.fishName + "/" + b.fishingRod + "/" + b.tide + "/" + b.size
+                                        + "/" + b.count);
                     }
                     break;
                 default:
